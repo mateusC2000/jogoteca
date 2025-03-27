@@ -17,6 +17,22 @@ game6= Game('Mortal Kombat', 'Fight', 'PS3')
 
 game_list = [game1, game2, game3, game4, game5, game6]
 
+class User:
+    def __init__(self, email, username, password):
+        self.email=email
+        self.username=username
+        self.password=password
+
+user1= User('mateus@campos.com', 'Teu', 'breakingbad')
+user2= User('julia@campos.com', 'Maju', 'narutinho')
+user3= User('vanessa@campos.com', 'Nessa', 'salvejorge')
+
+users = { 
+    user1.username : user1,
+    user2.username : user2,
+    user3.username : user3
+}
+
 app = Flask(__name__)
 app.secret_key = 'alura'
 
@@ -48,12 +64,14 @@ def login():
 
 @app.route('/authenticate', methods=['POST'])
 def authenticate():
-    if 'jujuba' == request.form['password']:
-        session['current_user'] = request.form['user']
-        flash('Bem vindo, ' + session['current_user'] + '!')
-        next_page = request.form['next']
+    if request.form['user'] in users:
+        user = users[request.form['user']]
+        if request.form['password'] == user.password:
+            session['current_user'] = user.username
+            flash('Bem vindo, ' + user.username + '!')
+            next_page = request.form['next']
 
-        return redirect('/{}'.format(next_page))
+            return redirect('/{}'.format(next_page))
     else:
         flash('Erro ao logar')
         return redirect(url_for('login'))
