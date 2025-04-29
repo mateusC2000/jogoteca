@@ -32,8 +32,8 @@ TABLES = {}
 TABLES['games'] = ('''
     CREATE TABLE `jogoteca`.`games` (
       `id` INT NOT NULL AUTO_INCREMENT,
-      `nome` VARCHAR(50) NOT NULL,
-      `categoria` VARCHAR(40) NOT NULL,
+      `name` VARCHAR(50) NOT NULL,
+      `category` VARCHAR(40) NOT NULL,
       `console` VARCHAR(20) NOT NULL,
       PRIMARY KEY (`id`))
     ENGINE = InnoDB
@@ -42,10 +42,10 @@ TABLES['games'] = ('''
 
 TABLES['users'] = ('''
     CREATE TABLE `jogoteca`.`users` (      
-      `nome` VARCHAR(50) NOT NULL,
-      `nickname` VARCHAR(10) NOT NULL,
-      `senha` VARCHAR(100) NOT NULL,
-      PRIMARY KEY (`nickname`))
+      `email` VARCHAR(50) NOT NULL,
+      `username` VARCHAR(10) NOT NULL,
+      `password` VARCHAR(100) NOT NULL,
+      PRIMARY KEY (`username`))
     ENGINE = InnoDB
     DEFAULT CHARACTER SET = utf8
     COLLATE = utf8_bin;  ''')
@@ -64,7 +64,7 @@ for tabela_nome in TABLES:
         print('ok')
 
 # inserindo usuários
-usuario_sql = 'INSERT INTO users (nome, nickname, senha) values (%s,%s,%s)'
+usuario_sql = 'INSERT INTO users (email, username, password) values (%s,%s,%s)'
 
 users = [
     ('mateus@campos.com', 'Teu', 'breakingbad'),
@@ -79,7 +79,7 @@ for user in cursor.fetchall():
     print(user[0])
 
 # inserindo games
-jogo_sql = 'INSERT INTO games (nome, categoria, console) values (%s,%s,%s)'
+jogo_sql = 'INSERT INTO games (name, category, console) values (%s,%s,%s)'
 
 games = [
     ('God Of War Ragnarök', 'Rack n Slash', 'PS5'),

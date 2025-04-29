@@ -1,39 +1,6 @@
 from flask import Flask, render_template, request, redirect, session, flash, url_for
 from flask_sqlalchemy import SQLAlchemy
 
-class Game:
-    def __init__(self, name, category, console):
-        self.name=name
-        self.category=category
-        self.console=console
-    
-game1= Game('God Of War Ragnarök', 'Rack n Slash', 'PS5')
-game2= Game('The Sims', 'Teen', 'PS4')
-game3= Game('Free Fire', 'Royale', 'Mobile')
-game4= Game('Pro Evolution Soccer 2009', 'Sport', 'PS2')
-game5= Game('Call Of Duty', 'FPS', 'PC')
-game6= Game('Mortal Kombat', 'Fight', 'PS3')
-
-
-
-game_list = [game1, game2, game3, game4, game5, game6]
-
-class User:
-    def __init__(self, email, username, password):
-        self.email=email
-        self.username=username
-        self.password=password
-
-user1= User('mateus@campos.com', 'Teu', 'breakingbad')
-user2= User('julia@campos.com', 'Maju', 'narutinho')
-user3= User('vanessa@campos.com', 'Nessa', 'salvejorge')
-
-users = { 
-    user1.username : user1,
-    user2.username : user2,
-    user3.username : user3
-}
-
 app = Flask(__name__)
 app.secret_key = 'alura'
 
@@ -48,8 +15,26 @@ app.config['SQLALCHEMY_DATABASE_URI'] = \
 
 db = SQLAlchemy(app)
 
+class Games(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(50), nullable=False )
+    category = db.Column(db.String(40), nullable=False )
+    console = db.Column(db.String(20), nullable=False )
+
+    def __repr__(self):
+        return '<Name %r>' % self.name
+
+class Users(db.Model):
+    username = db.Column(db.String(10), primary_key=True)
+    email = db.Column(db.String(50), nullable=False )
+    password = db.Column(db.String(100), nullable=False )
+
+    def __repr__(self):
+        return '<Email %r>' % self.email
+
 @app.route('/')
 def index():
+    game_list = Games.query.order_by(Games.id)
     return render_template('list.html', title='Jogos', games=game_list)
 
 @app.route('/new')
@@ -64,8 +49,16 @@ def create():
     category = request.form['category']
     console = request.form['console']
 
-    game = Game(name, category, console)
-    game_list.append(game)
+    game = Games.query.filter_by(name=name).first()
+
+    if game:
+        flash('Jogo já existente')
+        return redirect(url_for('index'))
+    
+    new_game = Games(name=name, category=category, console=console)
+    db.session.add(new_game)
+    db.session.commit()
+    flash('Jogo adicionado com sucesso!')
 
     return redirect(url_for('index'))
 
@@ -76,8 +69,8 @@ def login():
 
 @app.route('/authenticate', methods=['POST'])
 def authenticate():
-    if request.form['user'] in users:
-        user = users[request.form['user']]
+    user = Users.query.filter_by(username=request.form['user']).first()
+    if user:
         if request.form['password'] == user.password:
             session['current_user'] = user.username
             flash('Bem vindo, ' + user.username + '!')
