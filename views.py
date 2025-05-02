@@ -32,11 +32,12 @@ def create():
 
     return redirect(url_for('index'))
 
-@app.route('/edit')
-def edit():
+@app.route('/edit/<int:id>')
+def edit(id):
     if 'current_user' not in session or session['current_user'] == None:
         return redirect(url_for('login', next=url_for('edit')))
-    return render_template('edit.html', title='Edit Game')
+    game = Games.query.filter_by(id=id).first()
+    return render_template('edit.html', title='Edit Game', game=game)
 
 @app.route('/update', methods=['POST'])
 def update():
