@@ -32,6 +32,16 @@ def create():
 
     return redirect(url_for('index'))
 
+@app.route('/edit')
+def edit():
+    if 'current_user' not in session or session['current_user'] == None:
+        return redirect(url_for('login', next=url_for('edit')))
+    return render_template('edit.html', title='Edit Game')
+
+@app.route('/update', methods=['POST'])
+def update():
+    pass
+
 @app.route('/login')
 def login():
     next_page = request.args.get('next')
