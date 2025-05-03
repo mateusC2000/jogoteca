@@ -41,7 +41,16 @@ def edit(id):
 
 @app.route('/update', methods=['POST'])
 def update():
-    pass
+    game = Games.query.filter_by(id=request.form['id']).first()
+    game.name = request.form['name']
+    game.category = request.form['category']
+    game.console = request.form['console']
+
+    db.session.add(game)
+    db.session.commit()
+    flash('Jogo atualizado com sucesso!')
+
+    return redirect(url_for('index'))
 
 @app.route('/login')
 def login():
