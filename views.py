@@ -52,6 +52,17 @@ def update():
 
     return redirect(url_for('index'))
 
+@app.route('/delete/<int:id>')
+def delete(id):
+    if 'current_user' not in session or session['current_user'] == None:
+        return redirect(url_for('login'))
+    
+    Games.query.filter_by(id=id).delete()
+    db.session.commit()
+    flash('Jogo deletado com sucesso!')
+
+    return redirect(url_for('index'))
+
 @app.route('/login')
 def login():
     next_page = request.args.get('next')
