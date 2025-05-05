@@ -30,6 +30,10 @@ def create():
     db.session.commit()
     flash('Jogo adicionado com sucesso!')
 
+    file = request.files['file']
+    upload_path = app.config['UPLOAD_PATH']
+    file.save(f'{upload_path}/{new_game.name}.jpg')
+
     return redirect(url_for('index'))
 
 @app.route('/edit/<int:id>')
