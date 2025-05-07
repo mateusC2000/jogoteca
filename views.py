@@ -39,7 +39,7 @@ def create():
 @app.route('/edit/<int:id>')
 def edit(id):
     if 'current_user' not in session or session['current_user'] == None:
-        return redirect(url_for('login', next=url_for('edit')))
+        return redirect(url_for('login', next=url_for('edit', id=id)))
     game = Games.query.filter_by(id=id).first()
     return render_template('edit.html', title='Edit Game', game=game)
 
@@ -80,11 +80,14 @@ def authenticate():
             session['current_user'] = user.username
             flash('Bem vindo, ' + user.username + '!')
             next_page = request.form['next']
-
             return redirect('/{}'.format(next_page))
+        else:
+            flash('Senha incorreta')
+            return redirect(url_for('login'))
     else:
         flash('Erro ao logar')
         return redirect(url_for('login'))
+
 
 @app.route('/logout')
 def logout():
