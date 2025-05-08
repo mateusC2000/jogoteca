@@ -1,6 +1,7 @@
 from flask import render_template, request, redirect, session, flash, url_for, send_from_directory
 from jogoteca import app, db
 from models import Games, Users
+from helpers import recover_image
 
 @app.route('/')
 def index():
@@ -41,7 +42,8 @@ def edit(id):
     if 'current_user' not in session or session['current_user'] == None:
         return redirect(url_for('login', next=url_for('edit', id=id)))
     game = Games.query.filter_by(id=id).first()
-    return render_template('edit.html', title='Edit Game', game=game)
+    game_cover = recover_image(game.name)
+    return render_template('edit.html', title='Edit Game', game=game, game_cover=game_cover)
 
 @app.route('/update', methods=['POST'])
 def update():
@@ -53,6 +55,10 @@ def update():
     db.session.add(game)
     db.session.commit()
     flash('Jogo atualizado com sucesso!')
+
+    file = request.files['file']
+    upload_path = app.config['UPLOAD_PATH']
+    file.save(f'{upload_path}/{game.name}.jpg')
 
     return redirect(url_for('index'))
 
@@ -98,3 +104,4 @@ def logout():
 @app.route('/uploads/<file_name>')
 def image(file_name):
     return send_from_directory('uploads', file_name)
+
