@@ -13,18 +13,20 @@
         </figure>
         <fieldset>
           <div class="form-group">
-            <label for="name">Nome</label>
-            <input type="text" id="name" name="name" class="form-control">
+            {{ form.name.label(class="form-label") }}
+            {{ form.name(class="form-control") }}
           </div>
           <div class="form-group">
-            <label for="category">Categoria</label>
-            <input type="text" id="category" name="category" class="form-control">
+            {{ form.category.label(class="form-label") }}
+            {{ form.category(class="form-control") }}
           </div>
           <div class="form-group">
-            <label for="console">Console</label>
-            <input type="text" id="console" name="console" class="form-control">
+            {{ form.console.label(class="form-label") }}
+            {{ form.console(class="form-control") }}
           </div>
-          <button type="submit" class="btn btn-primary btn-salvar">Salvar</button>
+          <div>
+            {{ form.salvar(class="btn-primary") }}
+          </div>
           <a class="btn btn-danger" href="{{ url_for('index') }}">Voltar</a>
         </fieldset>
       </form>

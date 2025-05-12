@@ -1,7 +1,7 @@
 from flask import render_template, request, redirect, session, flash, url_for, send_from_directory
 from jogoteca import app, db
 from models import Games, Users
-from helpers import recover_image, delete_file
+from helpers import recover_image, delete_file, FormGame
 import time 
 
 @app.route('/')
@@ -13,13 +13,21 @@ def index():
 def new():
     if 'current_user' not in session or session['current_user'] == None:
         return redirect(url_for('login', next=url_for('new')))
-    return render_template('new.html', title='New Game')
+
+    form = FormGame()
+    return render_template('new.html', title='New Game', form=form)
 
 @app.route('/create', methods=['POST'])
 def create():
-    name = request.form['name']
-    category = request.form['category']
-    console = request.form['console']
+
+    form = FormGame(request.form)
+
+    if not form.validate_on_submit():
+        return redirect(url_for('new'))
+
+    name = form.name.data
+    category = form.category.data
+    console = form.console.data
 
     game = Games.query.filter_by(name=name).first()
 
