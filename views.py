@@ -52,25 +52,34 @@ def edit(id):
     if 'current_user' not in session or session['current_user'] == None:
         return redirect(url_for('login', next=url_for('edit', id=id)))
     game = Games.query.filter_by(id=id).first()
+
+    form = FormGame()
+    form.name.data = game.name
+    form.category.data = game.category
+    form.console.data = game.console
+
     game_cover = recover_image(game.name)
-    return render_template('edit.html', title='Edit Game', game=game, game_cover=game_cover)
+    return render_template('edit.html', title='Edit Game', id=id, game_cover=game_cover, form=form)
 
 @app.route('/update', methods=['POST'])
 def update():
-    game = Games.query.filter_by(id=request.form['id']).first()
-    game.name = request.form['name']
-    game.category = request.form['category']
-    game.console = request.form['console']
+    form = FormGame(request.form)
 
-    db.session.add(game)
-    db.session.commit()
-    flash('Jogo atualizado com sucesso!')
+    if form.validate_on_submit():
+        game = Games.query.filter_by(id=request.form['id']).first()
+        game.name = form.name.data
+        game.category = form.category.data
+        game.console = form.console.data
 
-    file = request.files['file']
-    upload_path = app.config['UPLOAD_PATH']
-    timestamp = time.time()
-    delete_file(game.name)
-    file.save(f'{upload_path}/{game.name}-{timestamp}.jpg')
+        db.session.add(game)
+        db.session.commit()
+        flash('Jogo atualizado com sucesso!')
+
+        file = request.files['file']
+        upload_path = app.config['UPLOAD_PATH']
+        timestamp = time.time()
+        delete_file(game.name)
+        file.save(f'{upload_path}/{game.name}-{timestamp}.jpg')
 
     return redirect(url_for('index'))
 
