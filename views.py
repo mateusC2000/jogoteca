@@ -1,7 +1,7 @@
 from flask import render_template, request, redirect, session, flash, url_for, send_from_directory
 from jogoteca import app, db
 from models import Games, Users
-from helpers import recover_image, delete_file, FormGame
+from helpers import recover_image, delete_file, FormGame, FormUser
 import time 
 
 @app.route('/')
@@ -97,13 +97,15 @@ def delete(id):
 @app.route('/login')
 def login():
     next_page = request.args.get('next')
-    return render_template('login.html', next=next_page)
+    form = FormUser()
+    return render_template('login.html', next=next_page, form=form)
 
 @app.route('/authenticate', methods=['POST'])
 def authenticate():
-    user = Users.query.filter_by(username=request.form['user']).first()
+    form = FormUser(request.form)
+    user = Users.query.filter_by(username=form.username.data).first()
     if user:
-        if request.form['password'] == user.password:
+        if form.password.data == user.password:
             session['current_user'] = user.username
             flash('Bem vindo, ' + user.username + '!')
             next_page = request.form['next']
