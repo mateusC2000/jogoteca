@@ -49,6 +49,10 @@ td {
     display: flex;
 }
 
+img {
+    width: 320px;
+}
+
 .formularioImagem {
     margin-right: 16px
 }
