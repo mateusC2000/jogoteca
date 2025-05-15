@@ -15,7 +15,7 @@ def new():
         return redirect(url_for('login', next=url_for('new')))
 
     form = FormGame()
-    return render_template('new.html', title='New Game', form=form)
+    return render_template('new.html', title='Novo Jogo', form=form)
 
 @app.route('/create', methods=['POST'])
 def create():
@@ -59,7 +59,7 @@ def edit(id):
     form.console.data = game.console
 
     game_cover = recover_image(game.name)
-    return render_template('edit.html', title='Edit Game', id=id, game_cover=game_cover, form=form)
+    return render_template('edit.html', title='Editar Jogo', id=id, game_cover=game_cover, form=form)
 
 @app.route('/update', methods=['POST'])
 def update():

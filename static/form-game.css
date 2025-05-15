@@ -1,0 +1,130 @@
+body {
+  background: #f0f2f5;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.formularioJogo {
+  background-color: #fff;
+  max-width: 800px;
+  margin: 50px auto;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+/* Imagem da capa */
+.formularioImagem {
+  padding: 0;
+  border: none;
+  max-width: 300px;
+  text-align: center;
+}
+
+.formularioImagem img {
+  width: 100%;
+  border-radius: 10px;
+  object-fit: cover;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Botão de upload */
+.fileContainer {
+  display: inline-block;
+  margin-top: 10px;
+  background-color: #007bff;
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.fileContainer:hover {
+  background-color: #0056b3;
+}
+
+.fileContainer input[type="file"] {
+  display: none;
+}
+
+/* Formulário */
+fieldset {
+  flex: 1;
+  min-width: 250px;
+  border: none;
+  padding: 0;
+}
+
+/* Inputs */
+.inputBox {
+  margin-bottom: 20px;
+}
+
+.inputBox label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #555;
+}
+
+.inputBox .form-control {
+  width: 100%;
+  height: 40px;
+  padding: 8px 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+/* Botões */
+.buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.buttons .btn {
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-weight: bold;
+  border: none;
+}
+
+.buttons .btn-primary {
+  background-color: #007bff;
+  color: white;
+  transition: background 0.3s;
+}
+
+.buttons .btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.buttons .btn-danger {
+  background-color: #dc3545;
+  color: white;
+  transition: background 0.3s;
+}
+
+.buttons .btn-danger:hover {
+  background-color: #a71d2a;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .formularioJogo {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .formularioImagem,
+  fieldset {
+    width: 100%;
+  }
+}
