@@ -2,6 +2,7 @@ from jogoteca import app
 from flask import render_template, request, redirect, session, flash, url_for
 from models import Users
 from helpers import FormUser
+from flask_bcrypt import check_password_hash
 
 @app.route('/login')
 def login():
@@ -13,15 +14,12 @@ def login():
 def authenticate():
     form = FormUser(request.form)
     user = Users.query.filter_by(username=form.username.data).first()
-    if user:
-        if form.password.data == user.password:
-            session['current_user'] = user.username
-            flash('Bem vindo, ' + user.username + '!')
-            next_page = request.form['next']
-            return redirect('/{}'.format(next_page))
-        else:
-            flash('Senha incorreta')
-            return redirect(url_for('login'))
+    password = check_password_hash(user.password, form.password.data)
+    if user and password:
+        session['current_user'] = user.username
+        flash('Bem vindo, ' + user.username + '!')
+        next_page = request.form['next']
+        return redirect('/{}'.format(next_page))
     else:
         flash('Erro ao logar')
         return redirect(url_for('login'))
